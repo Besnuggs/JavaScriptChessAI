@@ -112,13 +112,25 @@ main{
 /* Media Queries */
 /* Small phones - iphone 5/SE & iPhone 6/7/8 & Plus */
 @media(min-width: 300px){
-#gameBoard{
-    width:300px;
-}
+    body{
+        width: 100vw;
+        height:100vh;
+        overflow: hidden;
+    }
+
+    #gameBoard{
+        width:300px;
+    }
 }
 
 /* Galaxy S5 */
 @media(min-width: 350px){
+    body{
+        width: 100%;
+        height:100vh;
+        overflow: hidden;
+    }
+
     #gameBoard{
         width:300px;
     }
@@ -126,6 +138,11 @@ main{
 
 /* Pixel2 & Pixel 2 XL */
 @media(min-width: 400px){
+    body{
+        width: 100%;
+        height:100%;
+    }
+
     #gameBoard{
         width:400px;
     }
