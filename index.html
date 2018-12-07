@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="keywords" content="JavaScript, Chess, Chessjs, Chessboardjs, Brady Snuggs, JavaScript Chess AI">
+    <meta name="author" content="Brady Snuggs">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess</title>
+    <link rel="stylesheet" href="./css/chessboard-0.3.0.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+  </head>
+  <body>
+  <header>
+    <h1 id="title" role="title">JavaScript Chess</h1>
+  </header>
+
+  <main>
+    <div class="shadow" id="gameBoard"></div>
+
+    <section id="buttons">
+    <input class="btn-shadow" type="button" id="startBtn" value="New Game" />
+    <input class="btn-shadow" type="button" id="orientBtn" value="Switch" />
+    <input class="btn-shadow" type="button" id="saveGame" value="Save Game" />
+    </section>
+    <div role="fen-container">
+      <p>FEN: <span id="fen"></span></p>
+    </div>
+
+    <section class="game-details">
+      <p><span id="status"></p>
+      <div class="shadow" id="pgn-container">
+        <h4 id="SAN">SAN</h4>
+      <span id="pgn"></span>
+      </div>
+    </section>
+  </main>
+
+
+    <script src="./js/chess.min.js"></script>
+    <script src="./js/chessboard-0.3.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
