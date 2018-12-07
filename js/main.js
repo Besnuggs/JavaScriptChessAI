@@ -16,6 +16,26 @@ window.onload = function() {
 // Button Clicks
 document.getElementById('startBtn').addEventListener('click', window.onload)
 document.getElementById('orientBtn').addEventListener('click', switchOrient)
+document.getElementById('undoBtn').addEventListener('click', undoLast)
+
+
+//Undo last move
+function undoLast () {
+game.undo();
+game.fen();
+board.position(game.fen());
+updateStatus();
+}
+
+//Copy PGN to Clipboard
+const copyToClipboard = (str) => {
+const element = document.createElement('textarea');
+element.value = str.innerText
+document.body.appendChild(element);
+element.select();
+document.execCommand('copy');
+document.body.removeChild(element);
+}
 
 function switchOrient (){
     let response = confirm('This will reset the board with you playing as the opposite color.')
@@ -41,7 +61,8 @@ var initGame = function(orientObj){
         onDrop: handleMove,
         onDragStart: onDragStart,
         onSnapEnd: onSnapEnd,
-        switchOrient: switchOrient
+        switchOrient: switchOrient,
+        undoLast: undoLast
     };
 
     board = new ChessBoard('gameBoard', cfg);

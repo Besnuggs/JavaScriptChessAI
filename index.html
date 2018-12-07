@@ -17,6 +17,7 @@
     <div class="shadow" id="gameBoard"></div>
 
     <section id="buttons">
+    <input class="btn-shadow" type="button" id="undoBtn" value="Undo" />
     <input class="btn-shadow" type="button" id="startBtn" value="New Game" />
     <input class="btn-shadow" type="button" id="orientBtn" value="Switch" />
     <input class="btn-shadow" type="button" id="saveGame" value="Save Game" />
@@ -31,6 +32,7 @@
         <h4 id="SAN">SAN</h4>
       <span id="pgn"></span>
       </div>
+      <input onclick="{const pgn = document.getElementById('pgn')} copyToClipboard(pgn) " type="button" class="btn-shadow" id="copyPgn" value="Copy PGN to Clipboard" />
     </section>
   </main>
 
