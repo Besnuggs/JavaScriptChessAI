@@ -3,8 +3,6 @@
 }
 
 body{
-    height: 100vh;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -83,9 +81,9 @@ main{
 
 #SAN{
     position: relative;
-    left: 50%;
+    left: 45%;
     top:0;
-    transform: translateY(50%,50%);
+    transform: translateY(45%,50%);
 }
 
 #pgn{

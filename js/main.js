@@ -1,10 +1,14 @@
+//Essentials
 var board;
 var cfg;
 var game;
+
+//Game Details
 var statusEl = $('#status'),
 fenEl = $('#fen'),
 pgnEl = $('#pgn');
 
+//Game Initialization on window load
 window.onload = function() {
     initGame();
 }
@@ -14,11 +18,15 @@ document.getElementById('startBtn').addEventListener('click', window.onload)
 document.getElementById('orientBtn').addEventListener('click', switchOrient)
 
 function switchOrient (){
-    console.log(board.orientation)
     let response = confirm('This will reset the board with you playing as the opposite color.')
     if(response){
         initGame()
-        board.flip()
+        updateStatus()
+        board.orientation('black')
+    } else{
+        initGame()
+        updateStatus()
+        board.orientation('white')
     }
 }
 
@@ -47,8 +55,6 @@ var onDragStart = function(source, piece, position, orientation) {
       piece.search(/^b/) !== -1) {
       return false;
     }
-
-   
   };
   
   var makeRandomMove = function() {
