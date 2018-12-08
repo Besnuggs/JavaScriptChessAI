@@ -11,6 +11,7 @@ pgnEl = $('#pgn');
 //Game Initialization on window load
 window.onload = function() {
     initGame();
+    updateStatus();
 }
 
 // Button Clicks
@@ -95,7 +96,6 @@ var onDragStart = function(source, piece, position, orientation) {
   // for castling, en passant, pawn promotion
   var onSnapEnd = function() {
     board.position(game.fen());
-
      //Game Alerts for Checkmate/Draws
      if(game.in_checkmate() === true){
          let response = confirm('Game Over! Checkmate!')
@@ -183,11 +183,11 @@ var updateStatus = function() {
         status += ', ' + moveColor + ' is in check';
       }
     }
-  
+    
+
     statusEl.html(status);
     fenEl.html(game.fen());
     pgnEl.html(game.pgn());
   };
-  updateStatus();
 
 // Jquery Buttons

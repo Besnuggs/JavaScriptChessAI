@@ -30,7 +30,9 @@
       <p><span id="status"></p>
       <div class="shadow" id="pgn-container">
         <h4 id="SAN">SAN</h4>
-      <span id="pgn"></span>
+        <div id="pgn-list">
+          <span id="pgn"></span>
+        </div>
       </div>
       <input onclick="{const pgn = document.getElementById('pgn')} copyToClipboard(pgn) " type="button" class="btn-shadow" id="copyPgn" value="Copy PGN to Clipboard" />
     </section>

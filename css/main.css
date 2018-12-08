@@ -84,6 +84,19 @@ main{
     border: 3px solid #F0D9B5;
 }
 
+#pgn-list{
+    display:flex;
+    flex-direction: column;
+}
+
+.pgn-line{
+    display: block;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    color: red;
+}
+
 #SAN{
     position: relative;
     left: 45%;
