@@ -79,50 +79,113 @@ var onDragStart = function(source, piece, position, orientation) {
     }
   };
   
-  var makeRandomMove = function() {
-    var possibleMoves = game.moves();
+//   Make Random Move function
+//   var makeRandomMove = function() {
+//     var possibleMoves = game.moves();
   
-    // game over
-    if (possibleMoves.length === 0) return;
+//     // game over
+//     if (possibleMoves.length === 0) return;
   
-    var randomIndex = Math.floor(Math.random() * possibleMoves.length);
-    game.move(possibleMoves[randomIndex]);
-    board.position(game.fen());
-    updateStatus();
-  };
+//     var randomIndex = Math.floor(Math.random() * possibleMoves.length);
+//     game.move(possibleMoves[randomIndex]);
+//     board.position(game.fen());
+//     updateStatus();
+//   };
 
+// Evaluation function and Piece Values
+var evaluateBoard = function (board) {
+    var totalEvaluation = 0;
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+            console.log(board)
+            totalEvaluation = totalEvaluation + getPieceValue(board[i][j]);
+        }
+    }
+    console.log(totalEvaluation)
+    return totalEvaluation;
+};
+
+var getPieceValue = function (piece) {
+    if (piece === null) {
+        return 0;
+    }
+    var getAbsoluteValue = function (piece) {
+        if (piece.type === 'p') {
+            return 10;
+        } else if (piece.type === 'r') {
+            return 50;
+        } else if (piece.type === 'n') {
+            return 30;
+        } else if (piece.type === 'b') {
+            return 30 ;
+        } else if (piece.type === 'q') {
+            return 90;
+        } else if (piece.type === 'k') {
+            return 900;
+        }
+        throw "Unknown piece type: " + piece.type;
+    };
+
+    var absoluteValue = getAbsoluteValue(piece, piece.color === 'w');
+    return piece.color === 'w' ? absoluteValue : -absoluteValue;
+};
+
+var calculateBestMove = function() {
+    //generate all the moves for a given position
+    var newGameMoves = game.moves();
+    if (newGameMoves.length === 0) return;
+
+    let bestMove = null;
+    let bestValue = -9999;
+
+    //this 'for loop' is going through array of legal moves.
+    //game.move will play each move
+    for(var i = 0; i < newGameMoves.length; i++){
+        let newGameMove = newGameMoves[i];
+        game.move(newGameMove)
+        //take the negative as AI plays as black
+        let boardValue = -evaluateBoard(game.board())
+        console.log(boardValue)
+        game.undo()
+        
+        if(boardValue > bestValue){
+            bestValue = boardValue;
+            bestMove = newGameMove
+        }
+    }
+
+    console.log(bestMove)
+    game.move(bestMove);
+    board.position(game.fen())
+    updateStatus();
+};
   
   // update the board position after the piece snap
   // for castling, en passant, pawn promotion
   var onSnapEnd = function() {
     board.position(game.fen());
      //Game Alerts for Checkmate/Draws
-     if(game.in_checkmate() === true){
+     if(game.in_checkmate()){
          let response = confirm('Game Over! Checkmate!')
          if(response){
          window.location.reload()
         }
-    } else if (game.in_stalemate() === true){
+    } else if (game.in_stalemate()){
         let response = confirm('Game Over! Stalemate!')
         if(response){
             window.location.reload()
            }
-    } else if (game.insufficient_material() === true){
+    } else if (game.insufficient_material()){
         let response = confirm('Game Over! Insufficient Material!')
         if(response){
             window.location.reload()
            }
-    } else if (game.in_threefold_repetition() === true){
+    } else if (game.in_threefold_repetition()){
         let response = confirm('Game Over! Threefold Repetition!')
         if(response){
             window.location.reload()
            }
-    } else if (game.half_moves >= 100){
-        let response = confirm('Game Over! Game has exceeded 100 moves.')
-        if(response){
-            window.location.reload()
-           }
-    }
+    } 
   };
 
 
@@ -139,7 +202,7 @@ var handleMove = function(source, target) {
       if (move === null) return 'snapback';
     
       // make random legal move for black
-      window.setTimeout(makeRandomMove, 250);
+      window.setTimeout(calculateBestMove, 250);
 
       updateStatus();
 }
