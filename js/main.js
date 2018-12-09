@@ -97,11 +97,9 @@ var evaluateBoard = function (board) {
     var totalEvaluation = 0;
     for (var i = 0; i < 8; i++) {
         for (var j = 0; j < 8; j++) {
-            console.log(board)
             totalEvaluation = totalEvaluation + getPieceValue(board[i][j]);
         }
     }
-    console.log(totalEvaluation)
     return totalEvaluation;
 };
 
@@ -145,7 +143,6 @@ var calculateBestMove = function() {
         game.move(newGameMove)
         //take the negative as AI plays as black
         let boardValue = -evaluateBoard(game.board())
-        console.log(boardValue)
         game.undo()
         
         if(boardValue > bestValue){
@@ -153,8 +150,6 @@ var calculateBestMove = function() {
             bestMove = newGameMove
         }
     }
-
-    console.log(bestMove)
     game.move(bestMove);
     board.position(game.fen())
     updateStatus();
