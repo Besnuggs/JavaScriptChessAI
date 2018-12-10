@@ -2,6 +2,7 @@
 var board;
 var cfg;
 var game;
+var positionCount;
 
 //Game Details
 var statusEl = $('#status'),
@@ -79,18 +80,53 @@ var onDragStart = function(source, piece, position, orientation) {
     }
   };
   
-//   Make Random Move function
-//   var makeRandomMove = function() {
-//     var possibleMoves = game.moves();
-  
-//     // game over
-//     if (possibleMoves.length === 0) return;
-  
-//     var randomIndex = Math.floor(Math.random() * possibleMoves.length);
-//     game.move(possibleMoves[randomIndex]);
-//     board.position(game.fen());
-//     updateStatus();
-//   };
+
+
+// minimax functions
+var minimaxRoot =function(depth, game, isMaximisingPlayer) {
+
+    var newGameMoves = game.moves();
+    var bestMove = -9999;
+    var bestMoveFound;
+
+    for(var i = 0; i < newGameMoves.length; i++) {
+        var newGameMove = newGameMoves[i];
+        game.move(newGameMove);
+        var value = minimax(depth - 1, game, !isMaximisingPlayer);
+        game.undo();
+        if(value >= bestMove) {
+            bestMove = value;
+            bestMoveFound = newGameMove;
+        }
+    }
+    return bestMoveFound;
+};
+
+  var minimax = function (depth, game, isMaximisingPlayer) {
+    positionCount++;
+    if (depth === 0) {
+        return -evaluateBoard(game.board());
+    }
+
+    var newGameMoves = game.moves();
+    if (isMaximisingPlayer) {
+        var bestMove = -9999;
+        for (var i = 0; i < newGameMoves.length; i++) {
+            game.move(newGameMoves[i]);
+            bestMove = Math.max(bestMove, minimax(depth - 1, game, !isMaximisingPlayer));
+            game.undo();
+        }
+        return bestMove;
+    } else {
+        var bestMove = 9999;
+        for (var i = 0; i < newGameMoves.length; i++) {
+            game.move(newGameMoves[i]);
+            bestMove = Math.min(bestMove, minimax(depth - 1, game, !isMaximisingPlayer));
+            game.undo();
+        }
+        return bestMove;
+    }
+};
 
 // Evaluation function and Piece Values
 var evaluateBoard = function (board) {
@@ -155,6 +191,28 @@ var calculateBestMove = function() {
     updateStatus();
 };
   
+var makeBestMove = function () {
+    var bestMove = getBestMove(game);
+    game.move(bestMove);
+    board.position(game.fen());
+};
+
+
+var getBestMove = function (game) {
+    positionCount = 0;
+    var depth = parseInt($('#search-depth').find(':selected').text());
+    var d = new Date().getTime();
+    var bestMove = minimaxRoot(depth, game, true);
+    var d2 = new Date().getTime();
+    var moveTime = (d2 - d);
+    var positionsPerS = ( positionCount * 1000 / moveTime);
+
+    $('#position-count').text(positionCount);
+    $('#time').text(moveTime/1000 + 's');
+    $('#positions-per-s').text(positionsPerS);
+    return bestMove;
+};
+
   // update the board position after the piece snap
   // for castling, en passant, pawn promotion
   var onSnapEnd = function() {
@@ -195,10 +253,15 @@ var handleMove = function(source, target) {
     
       // illegal move
       if (move === null) return 'snapback';
-    
-      // make random legal move for black
-      window.setTimeout(calculateBestMove, 250);
 
+      //GreySquares
+      removeGreySquares();
+      if (move === null) {
+          return 'snapback';
+      }
+    
+      // make best legal move for black
+      window.setTimeout(makeBestMove, 250);
       updateStatus();
 }
 
@@ -216,36 +279,64 @@ var promotionOptions = function(){
 
 var updateStatus = function() {
     var status = '';
-  
     var moveColor = 'White';
     if (game.turn() === 'b') {
       moveColor = 'Black';
     }
-  
     // checkmate?
     if (game.in_checkmate() === true) {
       status = 'Game over, ' + moveColor + ' is in checkmate.';
     }
-  
     // draw?
     else if (game.in_draw() === true) {
       status = 'Game over, drawn position';
     }
-  
     // game still on
     else {
       status = moveColor + ' to move';
-  
       // check?
       if (game.in_check() === true) {
         status += ', ' + moveColor + ' is in check';
       }
     }
-    
-
     statusEl.html(status);
     fenEl.html(game.fen());
     pgnEl.html(game.pgn());
   };
+
+// Grey Squares
+var onMouseoverSquare = function(square, piece) {
+    var moves = game.moves({
+        square: square,
+        verbose: true
+    });
+
+    if (moves.length === 0) return;
+
+    greySquare(square);
+
+    for (var i = 0; i < moves.length; i++) {
+        greySquare(moves[i].to);
+    }
+};
+
+var onMouseoutSquare = function(square, piece) {
+    removeGreySquares();
+};
+
+var removeGreySquares = function() {
+    $('#board .square-55d63').css('background', '');
+};
+
+var greySquare = function(square) {
+    var squareEl = $('#board .square-' + square);
+
+    var background = '#a9a9a9';
+    if (squareEl.hasClass('black-3c85d') === true) {
+        background = '#696969';
+    }
+
+    squareEl.css('background', background);
+};
 
 // Jquery Buttons
