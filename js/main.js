@@ -86,29 +86,33 @@ var onDragStart = function(source, piece, position, orientation) {
   // for castling, en passant, pawn promotion
   var onSnapEnd = function() {
     board.position(game.fen());
-     //Game Alerts for Checkmate/Draws
-     if(game.in_checkmate()){
-         let response = confirm('Game Over! Checkmate!')
-         if(response){
-         window.location.reload()
-        }
-    } else if (game.in_stalemate()){
-        let response = confirm('Game Over! Stalemate!')
-        if(response){
-            window.location.reload()
-           }
-    } else if (game.insufficient_material()){
-        let response = confirm('Game Over! Insufficient Material!')
-        if(response){
-            window.location.reload()
-           }
-    } else if (game.in_threefold_repetition()){
-        let response = confirm('Game Over! Threefold Repetition!')
-        if(response){
-            window.location.reload()
-           }
-    } 
+    endgameConditions()
   };
+
+  function endgameConditions (){
+       //Game Alerts for Checkmate/Draws
+     if(game.in_checkmate()){
+        let response = confirm('Game Over! Checkmate!')
+        if(response){
+        window.location.reload()
+       }
+   } else if (game.in_stalemate()){
+       let response = confirm('Game Over! Stalemate!')
+       if(response){
+           window.location.reload()
+          }
+   } else if (game.insufficient_material()){
+       let response = confirm('Game Over! Insufficient Material!')
+       if(response){
+           window.location.reload()
+          }
+   } else if (game.in_threefold_repetition()){
+       let response = confirm('Game Over! Threefold Repetition!')
+       if(response){
+           window.location.reload()
+          }
+   } 
+  }
 
 
 
