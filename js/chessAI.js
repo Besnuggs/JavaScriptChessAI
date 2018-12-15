@@ -21,6 +21,7 @@ var minimaxRoot =function(depth, game, isMaximisingPlayer) {
 };
 
 var minimax = function (depth, game, alpha, beta, isMaximisingPlayer) {
+    console.log(game)
     positionCount++;
     if (depth === 0) {
         return -evaluateBoard(game.board());
@@ -186,6 +187,7 @@ var makeBestMove = function () {
 };
 
 var getBestMove = function (game) {
+    console.log(game)
     positionCount = 0;
     var depth = parseInt($('#search-depth').find(':selected').text());
     var d = new Date().getTime();
