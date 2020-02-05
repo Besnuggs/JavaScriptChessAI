@@ -17,7 +17,7 @@ window.onload = function() {
 
 // Button Clicks
 document.getElementById('startBtn').addEventListener('click', window.onload)
-document.getElementById('orientBtn').addEventListener('click', switchOrient)
+// document.getElementById('orientBtn').addEventListener('click', switchOrient)
 document.getElementById('undoBtn').addEventListener('click', undoLast)
 
 
@@ -39,18 +39,18 @@ document.execCommand('copy');
 document.body.removeChild(element);
 }
 
-function switchOrient (){
-    let response = confirm('This will reset the board with you playing as the opposite color.')
-    if(response){
-        initGame()
-        updateStatus()
-        board.orientation('black')
-    } else{
-        initGame()
-        updateStatus()
-        board.orientation('white')
-    }
-}
+// function switchOrient (){
+//     let response = confirm('This will reset the board with you playing as the opposite color.')
+//     if(response){
+//         initGame()
+//         updateStatus()
+//         board.orientation('black')
+//     } else{
+//         initGame()
+//         updateStatus()
+//         board.orientation('white')
+//     }
+// }
 
 
 
@@ -63,7 +63,6 @@ var initGame = function(orientObj){
         onDrop: handleMove,
         onDragStart: onDragStart,
         onSnapEnd: onSnapEnd,
-        switchOrient: switchOrient,
         undoLast: undoLast
     };
 
